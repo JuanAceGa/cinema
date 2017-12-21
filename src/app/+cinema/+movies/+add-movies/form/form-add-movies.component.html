@@ -1,0 +1,101 @@
+<hr>
+
+<h4 class="text-center badge-primary">Add Movies</h4>
+<div class="row justify-content-left">
+    <div class="col-10">
+        <button type="button" class="btn btn-primary btn-sm" (click)="createMovie()">Create</button>
+    </div>
+</div>
+<div class="row justify-content-center">
+        <div class="col-8">
+            <div class="alert alert-dismissible alert-success" *ngIf="!isSave">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>The movie has been saved!</strong>
+            </div>
+        </div>
+    </div>
+<div *ngIf="visible">
+    <form novalidate [formGroup]="amForm" (submit)="onSubmit(movie)" enctype="multipart/form-data">
+        <div class="row justify-content-center">
+            <fieldset class="col-8">
+                <div class="row">
+                    <div class="form-group col-md-6" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched), 
+                                                                     'has-success': name.valid && (name.dirty || name.touched)}">
+                        <label for="movieName">Movie Name</label>
+                        <input type="text" class="form-control" id="movieName" formControlName="name" [(ngModel)]="movie.name" required placeholder="Enter name"
+                            [ngClass]="{'is-invalid': name.invalid && (name.dirty || name.touched), 'is-valid': name.valid && (name.dirty || name.touched)}">
+                        <div class="invalid-feedback" *ngIf="name.errors && (name.dirty || name.touched)">The name is required</div>
+                    </div>
+                    <div class="form-group col-md-6" [ngClass]="{'has-danger': genre.invalid && (genre.dirty || genre.touched), 
+                                                                     'has-success': genre.valid && (genre.dirty || genre.touched)}">
+                        <label for="movieGenre">Movie genre</label>
+                        <input type="text" class="form-control" id="movieGenre" formControlName="genre" [(ngModel)]="movie.genre" required placeholder="Enter genre"
+                            [ngClass]="{'is-invalid': genre.invalid && (genre.dirty || genre.touched), 'is-valid': genre.valid && (genre.dirty || genre.touched)}">
+                        <div class="invalid-feedback" *ngIf="genre.errors && (genre.dirty || genre.touched)">The genre is required</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6" [ngClass]="{'has-danger': language.invalid && (language.dirty || language.touched), 
+                                                                     'has-success': language.valid && (language.dirty || language.touched)}">
+                        <label for="movieLanguage">Movie Language</label>
+                        <input type="text" class="form-control" id="movieLanguage" formControlName="language" [(ngModel)]="movie.language" required
+                            placeholder="Enter language" [ngClass]="{'is-invalid': language.invalid && (language.dirty || language.touched), 'is-valid': language.valid && (language.dirty || language.touched)}">
+                        <div class="invalid-feedback" *ngIf="language.errors && (language.dirty || language.touched)">The language is required</div>
+                    </div>
+                    <div class="form-group col-md-6" [ngClass]="{'has-danger': image.invalid && (image.dirty || image.touched), 
+                                                                     'has-success': image.valid && (image.dirty || image.touched)}">
+                        <label for="movieImage">Movie Image Url</label>
+                        <input type="url" class="form-control" id="movieImage" formControlName="image" [(ngModel)]="movie.image" required placeholder="Enter Url"
+                            [ngClass]="{'is-invalid': image.invalid && (image.dirty || image.touched), 'is-valid': image.valid && (image.dirty || image.touched)}">
+                        <div class="invalid-feedback" *ngIf="image.errors && (image.dirty || image.touched)">The image url is required</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="movieSynopsis">Movie Synopsis</label>
+                        <textarea class="form-control" id="movieSynopsis" formControlName="synopsis" rows="5" [(ngModel)]="movie.synopsis"></textarea>
+                        <div class="invalid-feedback" *ngIf="synopsis.errors && (synopsis.dirty || synopsis.touched)">The synopsis is required</div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-default" (click)="resetForm()">Reset</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<div class="row justify-content-center">
+    <div class="col-10">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center">Name movie</th>
+                    <th scope="col" class="text-center">Gender</th>
+                    <th scope="col" class="text-center">Language</th>
+                    <th scope="col" class="text-center">Synopsis</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of movies">
+                    <th class="col-1 w-25">{{item.name}}</th>
+                    <td class="text-center">{{item.genre}}</td>
+                    <td class="text-center">{{item.language}}</td>
+                    <td class="text-justify col-sm-1">{{item.synopsis}}</td>
+                    <td class="text-center col-sm-1">
+                        <button type="button" class="btn btn-warning btn-sm" (click)="editMovie(item)">Edit</button>
+                        <button type="button" class="btn btn-danger btn-sm" (click)="deleteMovie(item)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

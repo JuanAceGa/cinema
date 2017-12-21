@@ -1,0 +1,51 @@
+<hr>
+
+<h4 class="text-center badge-primary">Movies in theaters</h4>
+
+<table class="table">
+    <tbody>
+        <tr *ngFor="let item of movies">
+            <td class="w-25">
+                <img src="{{item.image}}" [alt]="item.name" style="width: 500px; height: 250px">
+            </td>
+            <td>
+                <strong>Name: </strong> {{item.name}}
+                <br>
+                <strong>Genre: </strong> {{item.genre}}
+                <br>
+                <strong>Language: </strong> {{item.language}}
+                <br>
+                <p class="text-justify">
+                    <strong>Synopsis: </strong> {{item.synopsis}}
+                </p>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary btn-sm" (click)="viewTheaters(item.name)">View Theaters</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="modal" id="modal-theaters">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><strong>{{movieTitle}}</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeModal('#modal-theaters')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div *ngFor="let item of theatersFunc" >
+                    <p><strong>Theater: </strong>{{item.theater}}</p>
+                    <p><strong>Location: </strong>{{item.location}}</p>
+                    <p><strong>Show time: </strong>{{item.time}}</p>
+                    <hr>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal('#modal-theaters')">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

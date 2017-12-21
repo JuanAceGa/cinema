@@ -1,0 +1,138 @@
+<hr>
+
+<h4 class="text-center badge-primary">Add Theaters</h4>
+<div class="row justify-content-left">
+    <div class="col-10">
+        <button type="button" class="btn btn-primary btn-sm" (click)="createTheater()">Create</button>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div class="alert alert-dismissible alert-success" *ngIf="!isSave">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>The theater has been saved!</strong>
+        </div>
+    </div>
+</div>
+<div *ngIf="visible">
+    <form novalidate [formGroup]="atForm" (submit)="onSubmit(theater)" enctype="multipart/form-data">
+        <div class="row justify-content-center">
+            <fieldset class="col-8">
+                <div class="row">
+                    <div class="form-group col-md-6" [ngClass]="{'has-danger': name.invalid && (name.dirty || name.touched), 
+                                                                     'has-success': name.valid && (name.dirty || name.touched)}">
+                        <label for="theaterName">Theater name</label>
+                        <input type="text" class="form-control" id="theaterName" formControlName="name" [(ngModel)]="theater.name" required placeholder="Enter name"
+                            [ngClass]="{'is-invalid': name.invalid && (name.dirty || name.touched), 'is-valid': name.valid && (name.dirty || name.touched)}">
+                        <div class="invalid-feedback" *ngIf="name.errors && (name.dirty || name.touched)">The name is required</div>
+                    </div>
+                    <div class="form-group col-md-6" [ngClass]="{'has-danger': location.invalid && (location.dirty || location.touched), 
+                                                                     'has-success': location.valid && (location.dirty || location.touched)}">
+                        <label for="theaterLocation">Theater location</label>
+                        <input type="text" class="form-control" id="theaterLocation" formControlName="location" [(ngModel)]="theater.location" required
+                            placeholder="Enter location" [ngClass]="{'is-invalid': location.invalid && (location.dirty || location.touched), 'is-valid': location.valid && (location.dirty || location.touched)}">
+                        <div class="invalid-feedback" *ngIf="location.errors && (location.dirty || location.touched)">The location is required</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-6" [ngClass]="{'has-danger': film.name === '' && (movie.dirty || movie.touched), 
+                        'has-success': film.name !== '' && (movie.dirty || movie.touched)}">
+                        <label for="movieName">Movie name</label>
+                        <!--<input type="text" class="form-control" id="movieName" formControlName="movie" [(ngModel)]="film.name" placeholder="Enter name"
+                            [ngClass]="{'is-invalid': film.name === '' && (movie.dirty || movie.touched), 'is-valid': film.name !== '' && (movie.dirty || movie.touched)}">-->
+
+                        <select class="form-control" id="movieName" formControlName="movie" [(ngModel)]="film.name" 
+                        [ngClass]="{'is-invalid': film.name === '' && (movie.dirty || movie.touched), 'is-valid': film.name !== '' && (movie.dirty || movie.touched)}">
+                            <option value="{{item.name}}" *ngFor="let item of movies" >{{item.name}}</option>
+                        </select>
+
+                        <div class="invalid-feedback" *ngIf="film.name === '' && (movie.dirty || movie.touched)">The name is required</div>
+                    </div>
+                    <div class="form-group col-md-5" [ngClass]="{'has-danger': film.time === '' && (time.dirty || time.touched), 
+                                                'has-success': film.time !== '' && (time.dirty || time.touched)}">
+                        <label for="timeFunction">Time function</label>
+                        <input type="text" class="form-control" id="timeFunction" formControlName="time" [(ngModel)]="film.time" placeholder="Enter hh:mm"
+                            [ngClass]="{'is-invalid': film.time === '' && (time.dirty || time.touched), 'is-valid': film.time !== '' && (time.dirty || time.touched)}">
+                        <div class="invalid-feedback" *ngIf="film.time === '' && (time.dirty || time.touched)">The time is required</div>
+                    </div>
+                    <div class="col-md-1">
+                        <label for="timeFunction"></label>
+                        <button type="button" class="btn btn-success" (click)="addMovie()">Add</button>
+                    </div>
+
+                    <div class="col-12" *ngIf="req">
+                        <div class="alert alert-dismissible alert-warning">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>{{msg}}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center" *ngIf="inMoviesTh.length > 0">
+                    <div class="col-12">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Movie name</th>
+                                    <th class="text-center">Time function</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of inMoviesTh; let i = index ">
+                                    <td class="col-1 w-50">{{item.name}}</td>
+                                    <td class="col-1 w-25 text-center">{{item.time}}</td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-danger btn-sm" (click)="deleteMovie(i)">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-default" (click)="resetForm()">Reset</button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<div class="row justify-content-center">
+    <div class="col-10">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center">Name theater</th>
+                    <th scope="col" class="text-center">Location</th>
+                    <th scope="col" class="text-center">Functions</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of theaters">
+                    <td class="col-1 w-25">{{item.name}}</td>
+                    <td class="col-1 w-25">{{item.location}}</td>
+                    <td class="col-1 w-25">
+                        <tr *ngFor="let mov of item.movies" >
+                            <td><strong>Movie: </strong>{{mov.name}} - <strong>Time: </strong> {{mov.time}}</td>
+                        </tr>
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-warning btn-sm" (click)="editTheater(item)">Edit</button> |
+                        <button type="button" class="btn btn-danger btn-sm" (click)="deleteTheater(item)">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
